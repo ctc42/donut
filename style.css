@@ -1,0 +1,45 @@
+#ensemble
+{
+    height: 100%;
+    width: 100%;
+    position: relative;
+    /*border: 1px blue solid;*/
+}
+
+
+#DessinDonuts
+{
+    position: absolute;
+    /*la taille doit être définie dans le HTML sinon ça marche pas*/
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /*border: 1px rgba(116, 191, 66, 0.616) solid;*/
+}
+
+#blocktextexplicatif
+{
+    position: absolute;
+    top: 50%;
+    right: 0%;
+    transform: translate(+0%, -50%);
+
+    height: 90%;
+    background-color: rgb(64, 197, 93);
+    padding: 20 20 20 20 ;
+    overflow: auto;
+    font-size: 16px;
+    text-align: justify;
+}
+
+#imageIllustation
+{
+    display: flex;
+    max-width: 100%;
+    margin: auto;
+    border-radius: 10%;
+}
+
+.cacher{
+    display: none;
+}
