@@ -1,45 +1,44 @@
-#ensemble /*on met l'ensemble en relatif*/
+#container
 {
-    height: 100%;
-    width: 100%;
-    position: relative;
+    position:           fixed;
+    top:                0px;
+    left:               0px;
+    bottom:             0px;
+    right:              0px;
+    margin:             0px;
 }
 
-
-#DessinDonuts
+#donut
 {
-    position: absolute;
-    /*la taille doit être définie dans le HTML sinon ça marche pas*/
-    top: 50%; /*permet de centrer le donuts dans la page*/
-    left: 50%; /*permet de centrer le donuts dans la page*/
-    transform: translate(-50%, -50%); /*permet de centrer le donuts dans la page*/
-    /*border: 1px rgb(83, 117, 86) solid;*/
+    position:           absolute;
+    top:                50%;
+    left:               50%;
+    transform:          translate(-50%, -50%);
 }
 
-#blocktextexplicatif
+#axisDetails
 {
-    position: absolute;
-    top: 50%; /*permet de positionner le bloc expliatif*/
-    right: 0%; /*permet de positionner le bloc expliatif*/
-    transform: translate(+0%, -50%); /*permet de positionner le bloc expliatif*/
-
-    height: 100%; 
+    position:           absolute;
+    top:                50%;
+    right:              0%;
+    transform:          translate(+0%, -50%);
+    height:             100%; 
     background-color: rgb(64, 197, 93);
-    padding: 20 10 20 20 ; /*On met un espace autour*/
-    overflow: auto; /*Pour avoir le menu défillant*/
-    font-size: 16px; 
-    text-align: left;
+    padding:            20 10 20 20;
+    overflow:           auto;
+    font-size:          16px;
+    text-align:         left;
 }
 
-
-#imageIllustation
+#axisDetailsPicture
 {
-    display: flex; 
-    max-width: 100%;
-    margin: auto; /*centre*/
-    border-radius: 10%; /*arrondit les angles*/
+    display:            flex;
+    max-width:          100%;
+    margin:             auto;
+    border-radius:      10%;
 }
 
-.cacher{
-    display: none; /*permet de montrer et cacher la boite sur le coté*/
+.hidden
+{
+    display:            none;
 }
