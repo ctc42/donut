@@ -160,7 +160,7 @@ request.addEventListener("load", (e) =>
     var canvasWidth = Math.floor((0.85 * Math.min(window.innerWidth, window.innerHeight) / 10)) * 10; //< TODO: magic number 0.85 ??
 
     // Define internal radius in pixels.
-    var internalRadius = eval(donutParameters[1].Pourcentage_Rayon_InternePlanche) * canvasWidth;
+    var internalDonutRadius = eval(donutParameters[1].Pourcentage_Rayon_InternePlanche) * canvasWidth;
 
     // Define donut thickness in pixels.
     var donutThickness = eval(donutParameters[1].Pourcentage_Epaisseur_Plancher) * canvasWidth;
@@ -172,13 +172,12 @@ request.addEventListener("load", (e) =>
     var ceilThickness = eval(donutParameters[1].Pourcentage_Epaisseur_Plafond) * canvasWidth;
 
     // Define ceil radius to fit with canvas max size.
-    var ceilMaxRadius = internalRadius + donutThickness - ceilThickness / 2 + (canvasWidth / 2 - internalRadius - donutThickness) / (maxExternalRadius);
+    var ceilMaxRadius = internalDonutRadius + donutThickness - ceilThickness / 2 + (canvasWidth / 2 - internalDonutRadius - donutThickness) / (maxExternalRadius);
 
     // Donut ceil color.
     var donutCeilColor = donutParameters[1].Couleur_Plafond;
 
     // Define thickness.
-    var circleThickness = eval(donutParameters[1].Pourcentage_Epaisseur_Cercle_Autour) * canvasWidth;
     var radiusThickness = eval(donutParameters[1].Pourcentage_Epaisseur_Rayons) * canvasWidth;
 
     // Define default color for pen.
@@ -293,24 +292,25 @@ request.addEventListener("load", (e) =>
         drawLine(externalRadius - thickness, thickness, beginAngle, circleColor, radiusThickness);
         drawArc(angle, externalRadius - radiusThickness, radiusThickness, circleColor, beginAngle);
         drawArc(angle, externalRadius - thickness, radiusThickness, circleColor, beginAngle);
-        writeTextOnArcBaseline(donutThickness.toString() + "px", "Serif", "black", title, internalRadius - donutThickness, beginAngle + angle / 2, beginAngle, beginAngle + angle);
+        writeTextOnArcBaseline(donutThickness.toString() + "px", "Serif", "black", title, internalDonutRadius - donutThickness, beginAngle + angle / 2, beginAngle, beginAngle + angle);
     }
 
     // Draw external axis with black borders.
-    function ScoreExterne(angle, color, overColor, beginAngle, internalRadius, thickness, title)
+    function drawExternalSection(angle, color, overColor, beginAngle, internalRadius, thickness, title)
     {
-        if (thickness <= ceilMaxRadius + ceilThickness / 2 - internalRadius - donutThickness)
+        if (thickness <= ceilMaxRadius + ceilThickness / 2 - internalDonutRadius - donutThickness)
             drawArc(angle, internalRadius, thickness, color, beginAngle);
+
         else
         {
-            drawArc(angle, internalRadius, ceilMaxRadius + ceilThickness / 2 - internalRadius - donutThickness, color, beginAngle);
-            drawArc(angle, ceilMaxRadius + ceilThickness / 2, thickness - (ceilMaxRadius + ceilThickness / 2 - internalRadius - donutThickness), overColor, beginAngle);
+            drawArc(angle, internalRadius, ceilMaxRadius + ceilThickness / 2 - internalDonutRadius - donutThickness, color, beginAngle);
+            drawArc(angle, ceilMaxRadius + ceilThickness / 2, thickness - (ceilMaxRadius + ceilThickness / 2 - internalDonutRadius - donutThickness), overColor, beginAngle);
         }
 
-        drawLine(internalRadius + donutThickness, thickness, beginAngle + angle, circleColor, radiusThickness);
-        drawLine(internalRadius + donutThickness, thickness, beginAngle, circleColor, radiusThickness);
-        drawArc(100, internalRadius + donutThickness, radiusThickness, circleColor, beginAngle);
-        drawArc(angle, internalRadius + donutThickness + thickness - radiusThickness, radiusThickness, circleColor, beginAngle);
+        drawLine(internalDonutRadius + donutThickness, thickness, beginAngle + angle, circleColor, radiusThickness);
+        drawLine(internalDonutRadius + donutThickness, thickness, beginAngle, circleColor, radiusThickness);
+        drawArc(100, internalDonutRadius + donutThickness, radiusThickness, circleColor, beginAngle);
+        drawArc(angle, internalDonutRadius + donutThickness + thickness - radiusThickness, radiusThickness, circleColor, beginAngle);
         writeTextOnArcBaseline(donutThickness.toString() + "px", "Serif", "black", title, ceilMaxRadius + (canvasWidth / 2 - ceilMaxRadius - ceilThickness) / 2, beginAngle + angle / 2, beginAngle, beginAngle + angle);
     }
 
@@ -331,13 +331,13 @@ request.addEventListener("load", (e) =>
 
         for (let i = 0 ; i < externalAxisNumber ; i++)
         {
-          ScoreExterne(externalAxisList[i].angle,
-                       externalAxisList[i].currentColor,
-                       externalAxisList[i].overCurrentColor,
-                       externalAxisList[i].beginAngle,
-                       externalAxisList[i].internalRadius,
-                       externalAxisList[i].thickness,
-                       externalAxisList[i].title);
+            drawExternalSection(externalAxisList[i].angle,
+                        externalAxisList[i].currentColor,
+                        externalAxisList[i].overCurrentColor,
+                        externalAxisList[i].beginAngle,
+                        externalAxisList[i].internalRadius,
+                        externalAxisList[i].thickness,
+                        externalAxisList[i].title);
         }
 
         drawArc(100, ceilMaxRadius, ceilThickness, donutCeilColor, 0);
@@ -345,10 +345,10 @@ request.addEventListener("load", (e) =>
         // TODO: magic number 1.03 ??
         writeTextOnArcBaseline(ceilThickness.toString() + "px", "Serif", "white", "Plafond Environnemental", ceilMaxRadius * 1.03, 0) ;
 
-        drawArc(100, internalRadius - 1, donutThickness + 1, donutFloorColor, 0);
+        drawArc(100, internalDonutRadius - 1, donutThickness + 1, donutFloorColor, 0);
 
         // TODO: magic number 1.03 ??
-        writeTextOnArcBaseline(donutThickness.toString() + "px", "Serif", "white", "Plancher Social", internalRadius * 1.03, 0) ;
+        writeTextOnArcBaseline(donutThickness.toString() + "px", "Serif", "white", "Plancher Social", internalDonutRadius * 1.03, 0) ;
     }
 
     // First click on the donut.
@@ -370,7 +370,7 @@ request.addEventListener("load", (e) =>
     canvas.setAttribute("height", canvasWidth);
 
     // TODO: magic number 60 ??
-    axisDetails.style.width         = (window.innerWidth - canvasWidth - 60);
+    axisDetails.style.width         = window.innerWidth - canvasWidth - 60;
     axisDetails.style.borderRadius  = Math.trunc(((window.innerWidth - canvasWidth) / 1.2) * 0.05) + "px";
 
     axisDetails.style.backgroundColor = "rgb(64, 197, 93)";
@@ -379,8 +379,8 @@ request.addEventListener("load", (e) =>
     axisDetails.style.top             = "50%";
     axisDetails.style.right           = "0%";
     axisDetails.style.transform       = "translate(+0%, -50%)";
-    axisDetails.style.padding         = "20 20 20 20"
-    axisDetails.style.textAlign       = "left"
+    axisDetails.style.padding         = "20px";
+    axisDetails.style.textAlign       = "left";
 
     // Internal axis.
     var internalAxisNumber = internalAxisList.length;
@@ -389,7 +389,7 @@ request.addEventListener("load", (e) =>
     for (let i = 0 ; i < internalAxisNumber ; i++)
     {
         internalAxisList[i].setAngles(i * internalPercentInit, (i + 1) * internalPercentInit);
-        internalAxisList[i].setRadius(internalRadius - internalRadius * internalAxisList[i].value, internalRadius * internalAxisList[i].value);
+        internalAxisList[i].setRadius(internalDonutRadius - internalDonutRadius * internalAxisList[i].value, internalDonutRadius * internalAxisList[i].value);
     }
 
     // External axis.
@@ -398,11 +398,11 @@ request.addEventListener("load", (e) =>
     var externalPercentInit = 100 / externalAxisNumber;
     for (let i = 0 ; i < externalAxisNumber ; i++)
     {
-      externalAxisList[i].setAngles(i * externalPercentInit, (i + 1) * externalPercentInit);
-      externalAxisList[i].setRadius(internalRadius + donutThickness, (ceilMaxRadius + ceilThickness / 2 - internalRadius - donutThickness) * externalAxisList[i].value);
+        externalAxisList[i].setAngles(i * externalPercentInit, (i + 1) * externalPercentInit);
+        externalAxisList[i].setRadius(internalDonutRadius + donutThickness, (ceilMaxRadius + ceilThickness / 2 - internalDonutRadius - donutThickness) * externalAxisList[i].value);
     }
 
-    var percentInit=[internalPercentInit, externalPercentInit];
+    var percentInit = [internalPercentInit, externalPercentInit];
 
     drawDonut();
 
@@ -647,6 +647,7 @@ request.addEventListener("load", (e) =>
                     axisDetailsMoreInfoLink.setAttribute("href", axisList[k][i].link);
                     axisDetailsPicture.setAttribute("src", axisList[k][i].picture);
                     axisDetails.classList.remove('hidden');
+                    axisDetails.style.width = String(window.innerWidth - canvasWidth - 60) + "px";
 
                     axisList[k][i].currentColor = axisList[k][i].hoverColor;
                     axisList[k][i].overCurrentColor = axisList[k][i].overHoverColor;
@@ -667,7 +668,6 @@ request.addEventListener("load", (e) =>
             }
         };
     }
-
 
     var container = document.getElementById("container")
     container.addEventListener("click", (e) =>
