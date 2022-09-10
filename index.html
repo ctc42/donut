@@ -1,24 +1,22 @@
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <title>Donuts Observatoire Citoyen</title>
-    <link rel="stylesheet" href="style.css" />
-</head>
-
-<body>
-    <div id="ensemble">
-		<canvas id="DessinDonuts"></canvas> <!--dession du donuts-->
-        <div id="blocktextexplicatif" class="cacher">
-            <p id="textexplicatif"></p> <!--paragraphe écrit-->
-            <a id="lienEnSavoirPlus" target="_blank"><button>En savoir plus</button></a><br><br> <!--bouton en savoir plus-->
-            <img id="imageIllustation"> <!--image en dessous-->
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <title>Observatoire Citoyen - un projet du CTC 42</title>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <div id="container">
+            <canvas id="donut">
+            </canvas>
+            <div id="axisDetails" class="hidden">
+                <p id="axisDetailsText"></p>
+                <a id="axisDetailsMoreInfoLink" target="_blank"><button>En savoir plus</button></a><br><br>
+                <img id="axisDetailsPicture" />
+            </div>
         </div>
-	</div>
-
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/xlsx.full.min.js"></script> <!--Pour avoir XMSX-->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/jszip.js"></script> <!--Pour avoir XMSX-->
-	<script src="donuts.js"></script>
-</body>
-
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/xlsx.full.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/jszip.js"></script>
+        <script src="donut.js"></script>
+    </body>
 </html>
