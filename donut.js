@@ -1,5 +1,5 @@
 // Data source: use Excel file.
-const url = "https://drive.ctc-42.org/index.php/s/H8VMgZFSDTgeXqP/download"
+const url = "https://drive.ctc-42.org/index.php/s/t4pWxGcqdVD5QD2/download"
 
 // Donut axis.
 class Axis
