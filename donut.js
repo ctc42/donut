@@ -650,7 +650,16 @@ request.addEventListener("load", (e) =>
 
                     axisDetailsText.innerHTML = axisList[k][i].text;
                     axisDetailsMoreInfoLink.setAttribute("href", axisList[k][i].link);
-                    axisDetailsPicture.setAttribute("src", axisList[k][i].picture);
+
+                    //prevent the display of the image if the source is not provided
+                    if (typeof axisList[k][i].picture === 'string'){
+                        axisDetailsPicture.style.display = 'block'; //to force the display back if it was set to none before
+                        axisDetailsPicture.setAttribute("src", axisList[k][i].picture);
+                    }
+                    else {
+                        axisDetailsPicture.style.display = 'none';
+                    }
+
                     axisDetails.classList.remove('hidden');
                     axisDetails.style.width = String(window.innerWidth - canvasWidth - 60) + "px";
 
