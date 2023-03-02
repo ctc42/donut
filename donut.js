@@ -7,12 +7,12 @@ class Axis
     constructor(title, value, text, baseColor, hoverColor, disabledColor, overBaseColor, overHoverColor, disabledOverColor, link, picture, useCustomColor)
     {
         //handle error in case useCustomColor is undefined to avoid errors that prevents display
-        if(typeof(useCustomColor)=='undefined'){
+        if(typeof(useCustomColor)==='undefined'){
             useCustomColor='non'
         }
 
         // Use custom colors.
-        if ((useCustomColor.toLowerCase() == "oui"))
+        if ((useCustomColor.toLowerCase() === "oui"))
         {
             this.currentColor       = baseColor;          //< Current color used by the pen when drawing.
             this.baseColor          = baseColor;          //< Base color for donut between limits.
@@ -78,25 +78,25 @@ class Axis
 }
 
 // Read data source.
-var request = new XMLHttpRequest();
+let request = new XMLHttpRequest();
 request.open("GET", url, true);
 request.responseType = "arraybuffer";
 
-request.addEventListener("load", (e) =>
+request.addEventListener("load", () =>
 {
     // Read data.
-    var data = new Uint8Array(request.response);
-    var arr = new Array();
-    for (var i = 0 ; i != data.length ; i++)
+    let data = new Uint8Array(request.response);
+    let arr = [];
+    for (let i = 0 ; i !== data.length ; i++)
         arr[i] = String.fromCharCode(data[i]);
 
     // Open workbook.
-    var workbook = XLSX.read(arr.join(""), { type: "binary" });
+    let workbook = XLSX.read(arr.join(""), { type: "binary" });
 
     // Open sheets.
-    var socialSheet       = XLSX.utils.sheet_to_json(workbook.Sheets["Plancher Social"], { raw: true })
-    var environmentSheet  = XLSX.utils.sheet_to_json(workbook.Sheets["Plafond Environnement"], { raw: true })
-    var donutParameters   = XLSX.utils.sheet_to_json(workbook.Sheets["Parametre donuts"], { raw: true })
+    let socialSheet       = XLSX.utils.sheet_to_json(workbook.Sheets["Plancher Social"], { raw: true })
+    let environmentSheet  = XLSX.utils.sheet_to_json(workbook.Sheets["Plafond Environnement"], { raw: true })
+    let donutParameters   = XLSX.utils.sheet_to_json(workbook.Sheets["Parametre donuts"], { raw: true })
 
     // Read color from parameters.
     internalAxisColor         = donutParameters[1].Couleur_Interne; 
@@ -106,11 +106,11 @@ request.addEventListener("load", (e) =>
     redHoverColor             = donutParameters[1].Couleur_Rouge_Over;
     redDisabledColor          = donutParameters[1].Couleur_Rouge_Grise;
 
-    var internalAxisList = []
-    var axisNumber = socialSheet[0].Nom_Social
+    let internalAxisList = []
+    let axisNumber = socialSheet[0].Nom_Social
 
     // Start from line 5.
-    var currentExcelLine = 5;
+    let currentExcelLine = 5;
 
     for (let w = currentExcelLine - 2 ; w < currentExcelLine - 2 + axisNumber ; w++)
     {
@@ -128,7 +128,7 @@ request.addEventListener("load", (e) =>
                                                              socialSheet[w].traite_social)]);
     }
 
-    var externalAxisList =[]
+    let externalAxisList =[]
     axisNumber = environmentSheet[0].Nom_Environnement;
 
     // Reset current line.
@@ -151,7 +151,7 @@ request.addEventListener("load", (e) =>
     }
 
     // Get max radius.
-    var maxExternalRadius = externalAxisList[0].value
+    let maxExternalRadius = externalAxisList[0].value
     
     for (let i = 0 ; i < externalAxisList.length ; i++)
     {
@@ -162,31 +162,31 @@ request.addEventListener("load", (e) =>
     }
 
     // Define canvas width as multiple of 10 pixels.
-    var canvasWidth = Math.floor((0.85 * Math.min(window.innerWidth, window.innerHeight) / 10)) * 10; //< TODO: magic number 0.85 ??
+    let canvasWidth = Math.floor((0.85 * Math.min(window.innerWidth, window.innerHeight) / 10)) * 10; //< TODO: magic number 0.85 ??
 
     // Define internal radius in pixels.
-    var internalDonutRadius = eval(donutParameters[1].Pourcentage_Rayon_InternePlanche) * canvasWidth;
+    let internalDonutRadius = eval(donutParameters[1].Pourcentage_Rayon_InternePlanche) * canvasWidth;
 
     // Define donut thickness in pixels.
-    var donutThickness = eval(donutParameters[1].Pourcentage_Epaisseur_Plancher) * canvasWidth;
+    let donutThickness = eval(donutParameters[1].Pourcentage_Epaisseur_Plancher) * canvasWidth;
 
     // Donut floor color.
-    var donutFloorColor = donutParameters[1].Couleur_Plancher;
+    let donutFloorColor = donutParameters[1].Couleur_Plancher;
 
     // Define ceil thickness.
-    var ceilThickness = eval(donutParameters[1].Pourcentage_Epaisseur_Plafond) * canvasWidth;
+    let ceilThickness = eval(donutParameters[1].Pourcentage_Epaisseur_Plafond) * canvasWidth;
 
     // Define ceil radius to fit with canvas max size.
-    var ceilMaxRadius = internalDonutRadius + donutThickness - ceilThickness / 2 + (canvasWidth / 2 - internalDonutRadius - donutThickness) / (maxExternalRadius);
+    let ceilMaxRadius = internalDonutRadius + donutThickness - ceilThickness / 2 + (canvasWidth / 2 - internalDonutRadius - donutThickness) / (maxExternalRadius);
 
     // Donut ceil color.
-    var donutCeilColor = donutParameters[1].Couleur_Plafond;
+    let donutCeilColor = donutParameters[1].Couleur_Plafond;
 
     // Define thickness.
-    var radiusThickness = eval(donutParameters[1].Pourcentage_Epaisseur_Rayons) * canvasWidth;
+    let radiusThickness = eval(donutParameters[1].Pourcentage_Epaisseur_Rayons) * canvasWidth;
 
     // Define default color for pen.
-    var circleColor = "black"
+    let circleColor = "black"
 
     // Draw arc.
     // 'angle': arc angle in degrees.
@@ -238,13 +238,13 @@ request.addEventListener("load", (e) =>
     // 'endAngle': end angle in degrees.
     function writeTextOnArcBaseline(fontSize, font, color, text, radius, centerAngle, beginAngle, endAngle)
     {
-        var angle         = Math.PI * 2 * centerAngle / 100; 
-        var canvas        = document.getElementById("donut");
-        var context       = canvas.getContext("2d");
+        let angle         = Math.PI * 2 * centerAngle / 100; 
+        let canvas        = document.getElementById("donut");
+        let context       = canvas.getContext("2d");
         context.font      = "bold " + fontSize + " " + font;
         context.fillStyle = color;
 
-        var wordAngle=0;
+        let wordAngle=0;
         for (let i = 0 ; i < text.length ; i++)
         {
             wordAngle += context.measureText(text[i]).width / radius;
@@ -265,17 +265,17 @@ request.addEventListener("load", (e) =>
         }
 
         // Draw text.
-        var len = text.length;
+        let len = text.length;
 
         context.save();
         context.textAlign = 'center';
         context.translate(canvasWidth / 2, canvasWidth / 2);
         context.rotate(angle - wordAngle / 2);
 
-        for (var n = 0; n < len; n++)
+        for (let n = 0; n < len; n++)
         {
-            var s = text[n];
-            var letterAngle = 0.5 * (context.measureText(s).width / radius);
+            let s = text[n];
+            let letterAngle = 0.5 * (context.measureText(s).width / radius);
 
             context.rotate(letterAngle);
             context.save();
@@ -357,18 +357,18 @@ request.addEventListener("load", (e) =>
     }
 
     // First click on the donut.
-    var firstClick = true;
+    let firstClick = true;
 
-    var canvas  = document.getElementById("donut");
-    var context = canvas.getContext("2d");
+    let canvas  = document.getElementById("donut");
+    let context = canvas.getContext("2d");
 
-    var axisList = [internalAxisList,externalAxisList]
+    let axisList = [internalAxisList,externalAxisList]
 
     // Get HTML elements.
-    var axisDetailsText         = document.getElementById("axisDetailsText");
-    var axisDetailsMoreInfoLink = document.getElementById("axisDetailsMoreInfoLink");
-    var axisDetailsPicture      = document.getElementById("axisDetailsPicture");
-    var axisDetails             = document.getElementById("axisDetails");
+    let axisDetailsText         = document.getElementById("axisDetailsText");
+    let axisDetailsMoreInfoLink = document.getElementById("axisDetailsMoreInfoLink");
+    let axisDetailsPicture      = document.getElementById("axisDetailsPicture");
+    let axisDetails             = document.getElementById("axisDetails");
 
     // Apply some styles.
     canvas.setAttribute("width", canvasWidth);
@@ -388,9 +388,9 @@ request.addEventListener("load", (e) =>
     axisDetails.style.textAlign       = "left";
 
     // Internal axis.
-    var internalAxisNumber = internalAxisList.length;
+    let internalAxisNumber = internalAxisList.length;
 
-    var internalPercentInit = 100 / internalAxisNumber;
+    let internalPercentInit = 100 / internalAxisNumber;
     for (let i = 0 ; i < internalAxisNumber ; i++)
     {
         internalAxisList[i].setAngles(i * internalPercentInit, (i + 1) * internalPercentInit);
@@ -398,16 +398,16 @@ request.addEventListener("load", (e) =>
     }
 
     // External axis.
-    var externalAxisNumber = externalAxisList.length;
+    let externalAxisNumber = externalAxisList.length;
 
-    var externalPercentInit = 100 / externalAxisNumber;
+    let externalPercentInit = 100 / externalAxisNumber;
     for (let i = 0 ; i < externalAxisNumber ; i++)
     {
         externalAxisList[i].setAngles(i * externalPercentInit, (i + 1) * externalPercentInit);
         externalAxisList[i].setRadius(internalDonutRadius + donutThickness, (ceilMaxRadius + ceilThickness / 2 - internalDonutRadius - donutThickness) * externalAxisList[i].value);
     }
 
-    var percentInit = [internalPercentInit, externalPercentInit];
+    let percentInit = [internalPercentInit, externalPercentInit];
 
     drawDonut();
 
@@ -420,9 +420,9 @@ request.addEventListener("load", (e) =>
     // Return polar angle form cartesian coordinates.
     function Theta(x,y)
     {
-        var reponse;
+        let reponse;
 
-        if (x == 0)
+        if (x === 0)
         {
             if (y > 0)
                 reponse = Math.PI / 2;
@@ -478,7 +478,7 @@ request.addEventListener("load", (e) =>
             y = -e.layerY;
         }
 
-        var theta = Theta(x,y);
+        let theta = Theta(x,y);
 
         axisList.forEach(axis =>
         {
@@ -486,7 +486,7 @@ request.addEventListener("load", (e) =>
             {
                 if ((theta > axis[i].beginAngle / 100 * 2 * Math.PI) && (theta < axis[i].endAngle / 100 * 2 * Math.PI) && ((x ** 2 + y ** 2) <= (axis[i].internalRadius + axis[i].thickness) ** 2) && ((x ** 2 + y ** 2) >= axis[i].internalRadius ** 2))
                 {
-                    if (axis[i].overCurrentColor != axis[i].overHoverColor)
+                    if (axis[i].overCurrentColor !== axis[i].overHoverColor)
                     {
                         axis[i].currentColor     = axis[i].hoverColor;
                         axis[i].overCurrentColor = axis[i].overHoverColor;
@@ -496,7 +496,7 @@ request.addEventListener("load", (e) =>
 
                 else if (axis[i].grise)
                 {
-                    if (axis[i].overCurrentColor != axis[i].overBaseColor)
+                    if (axis[i].overCurrentColor !== axis[i].overBaseColor)
                     {
                         axis[i].currentColor     = axis[i].disabledColor;
                         axis[i].overCurrentColor = axis[i].disabledOverColor;
@@ -506,7 +506,7 @@ request.addEventListener("load", (e) =>
 
                 else
                 {
-                    if (axis[i].overCurrentColor != axis[i].overBaseColor)
+                    if (axis[i].overCurrentColor !== axis[i].overBaseColor)
                     {
                         axis[i].currentColor     = axis[i].baseColor;
                         axis[i].overCurrentColor = axis[i].overBaseColor;
@@ -523,7 +523,7 @@ request.addEventListener("load", (e) =>
         axisDetails.classList.add('hidden');
 
         // Number of steps to perform animation.
-        var stepNumber = 20;
+        let stepNumber = 20;
 
         for (let k = 0 ; k < axisList.length ; k++)
         {
@@ -556,7 +556,7 @@ request.addEventListener("load", (e) =>
 
     async function canvasClickEvent(e)
     {
-        var closeDonut = true
+        let closeDonut = true
         
         let x;
         let y;
@@ -580,22 +580,22 @@ request.addEventListener("load", (e) =>
             y = -e.layerY;
         }
 
-        var theta = Theta(x,y);
+        let theta = Theta(x,y);
 
         for (let k = 0 ; k < axisList. length; k++)
         {
-            var axisNumber = axisList[k].length;
+            let axisNumber = axisList[k].length;
 
             for (let i = 0 ; i < axisNumber ; i++)
             {
-                if ((axisList[k][i].open == false) && (theta > axisList[k][i].beginAngle / 100 * 2 * Math.PI) && (theta < axisList[k][i].endAngle / 100 * 2 * Math.PI) && ((x ** 2 + y ** 2) <= (axisList[k][i].internalRadius+axisList[k][i].thickness) ** 2) && ((x ** 2 + y ** 2) >= axisList[k][i].internalRadius ** 2))
+                if ((axisList[k][i].open === false) && (theta > axisList[k][i].beginAngle / 100 * 2 * Math.PI) && (theta < axisList[k][i].endAngle / 100 * 2 * Math.PI) && ((x ** 2 + y ** 2) <= (axisList[k][i].internalRadius+axisList[k][i].thickness) ** 2) && ((x ** 2 + y ** 2) >= axisList[k][i].internalRadius ** 2))
                 {
                     axisList[k][i].open = true;
                     closeDonut          = false;
 
                     resetDonut();
                     
-                    var cumuledPercent = axisList[k][i].angle * 1;
+                    let cumuledPercent = axisList[k][i].angle * 1;
                     stepNumber = 20;
 
                     for (let l = 0 ; l < stepNumber ; l++)
@@ -603,10 +603,10 @@ request.addEventListener("load", (e) =>
                         axisList[k][i].setAngles(axisList[k][i].beginAngle - cumuledPercent / (2 * stepNumber), axisList[k][i].endAngle + cumuledPercent / (2 * stepNumber));
                         for (let j = 0 ; j < axisList[k].length ; j++)
                         {
-                            var oldBeginPercent = axisList[k][j].beginAngle;
-                            var oldEndPercent   = axisList[k][j].endAngle;
+                            let oldBeginPercent = axisList[k][j].beginAngle;
+                            let oldEndPercent   = axisList[k][j].endAngle;
 
-                            if (i != j)
+                            if (i !== j)
                             {
                                 axisList[k][j].grise            = true;
                                 axisList[k][j].currentColor     = axisList[k][j].disabledColor;
@@ -631,10 +631,10 @@ request.addEventListener("load", (e) =>
                     {
                         stepNumber =50;
 
-                        var left            = 50;
-                        var translate       = 50;
-                        var deltaleft       = left / stepNumber;
-                        var deltatranslate  = translate / stepNumber;
+                        let left            = 50;
+                        let translate       = 50;
+                        let deltaleft       = left / stepNumber;
+                        let deltatranslate  = translate / stepNumber;
 
                         for (let l = 0 ; l < stepNumber ; l++)
                         {
@@ -680,13 +680,13 @@ request.addEventListener("load", (e) =>
                 for (let r = 0 ; r < axisList[q].length ; r++)
                     axisList[q][r].open = false;
             }
-        };
+        }
     }
 
-    var container = document.getElementById("container")
+    let container = document.getElementById("container")
     container.addEventListener("click", (e) =>
     {
-        var target = (e.target);
+        let target = (e.target);
         if((target.closest('#donut') == null && (target.closest('#blockaxisDetailsText') == null)))
             resetDonut();
     });
