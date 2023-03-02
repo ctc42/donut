@@ -653,7 +653,7 @@ request.addEventListener("load", () =>
                     //prevent the display of the button to see more when no link is provided
                     if(typeof axisList[k][i].link === 'string'){
                         axisDetailsMoreInfoLink.setAttribute("href", axisList[k][i].link);
-                        axisDetailsMoreInfoLink.style.display= 'block'; //reset display when previously set to none
+                        axisDetailsMoreInfoLink.style.display= 'inline'; //reset display when previously set to none
                     }
                     else{
                         axisDetailsMoreInfoLink.style.display = 'none';
