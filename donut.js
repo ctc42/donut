@@ -297,7 +297,7 @@ request.addEventListener("load", (e) =>
         drawLine(externalRadius - thickness, thickness, beginAngle, circleColor, radiusThickness);
         drawArc(angle, externalRadius - radiusThickness, radiusThickness, circleColor, beginAngle);
         drawArc(angle, externalRadius - thickness, radiusThickness, circleColor, beginAngle);
-        writeTextOnArcBaseline(donutThickness.toString() + "px", "Serif", "black", title, internalDonutRadius - donutThickness, beginAngle + angle / 2, beginAngle, beginAngle + angle);
+        writeTextOnArcBaseline((Math.trunc(donutThickness/2)).toString() + "px", "Serif", "black", title, internalDonutRadius - donutThickness, beginAngle + angle / 2, beginAngle, beginAngle + angle);
     }
 
     // Draw external axis with black borders.
