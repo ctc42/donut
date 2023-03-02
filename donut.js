@@ -4,15 +4,15 @@ const url = "https://drive.ctc-42.org/index.php/s/t4pWxGcqdVD5QD2/download"
 // Donut axis.
 class Axis
 {
-    constructor(title, value, text, baseColor, hoverColor, disabledColor, overBaseColor, overHoverColor, disabledOverColor, link, picture, useCustomColor)
+    constructor(title, value, text, baseColor, hoverColor, disabledColor, overBaseColor, overHoverColor, disabledOverColor, link, picture, isAxisCompleted)
     {
-        //handle error in case useCustomColor is undefined to avoid errors that prevents display
-        if(typeof(useCustomColor)==='undefined'){
-            useCustomColor='non'
+        //handle error in case isAxisCompleted is undefined to avoid errors that prevents display
+        if(typeof(isAxisCompleted)==='undefined'){
+            isAxisCompleted='non'
         }
 
-        // Use custom colors.
-        if ((useCustomColor.toLowerCase() === "oui"))
+        // Use colors of a completed axis
+        if ((isAxisCompleted.toLowerCase() === "oui"))
         {
             this.currentColor       = baseColor;          //< Current color used by the pen when drawing.
             this.baseColor          = baseColor;          //< Base color for donut between limits.
@@ -44,7 +44,7 @@ class Axis
             this.disabledOverColor          = defaultExternalColor;
         }
 
-        this.disabled = false;    // True if section is disabled.
+
         this.title    = title;    // Axis title.
         this.text     = text;     // Axis text.
         this.open     = false;    // Axis state: open or closed.
@@ -649,7 +649,16 @@ request.addEventListener("load", () =>
                     }
 
                     axisDetailsText.innerHTML = axisList[k][i].text;
-                    axisDetailsMoreInfoLink.setAttribute("href", axisList[k][i].link);
+
+                    //prevent the display of the button to see more when no link is provided
+                    if(typeof axisList[k][i].link === 'string'){
+                        axisDetailsMoreInfoLink.setAttribute("href", axisList[k][i].link);
+                        axisDetailsMoreInfoLink.style.display= 'block'; //reset display when previously set to none
+                    }
+                    else{
+                        axisDetailsMoreInfoLink.style.display = 'none';
+                    }
+
 
                     //prevent the display of the image if the source is not provided
                     if (typeof axisList[k][i].picture === 'string'){
