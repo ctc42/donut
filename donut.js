@@ -6,6 +6,11 @@ class Axis
 {
     constructor(title, value, text, baseColor, hoverColor, disabledColor, overBaseColor, overHoverColor, disabledOverColor, link, picture, useCustomColor)
     {
+        //handle error in case useCustomColor is undefined to avoid errors that prevents display
+        if(typeof(useCustomColor)=='undefined'){
+            useCustomColor='non'
+        }
+
         // Use custom colors.
         if ((useCustomColor.toLowerCase() == "oui"))
         {
